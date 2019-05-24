@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile picture update {% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Profile picture update</h3>
+                    <form method="POST" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'include/form.html' %}
+                        <button type="submit" class="btn btn-outline-dark btn-block">Change Profile Picture</button>
+                    </form>
+                    <div class="card-footer text-muted">
+                        Don't want to change?<a href="{% url 'profile' user.username user.pk %}">Go back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -3,15 +3,15 @@
 
 {% block stylesheet %}
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-<link rel="stylesheet"
-    href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-    integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
 <link rel="stylesheet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
-<link rel="stylsheet" href="{% static 'css/profile.css' %}"
+<link rel="stylsheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block js %}  
+</script>
+<script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}
 
 {% block navbar %}
@@ -30,8 +30,10 @@
                     <div class="col-md-6 ml-auto mr-auto">
                         <div class="profile">
                             <div class="avatar">
-                                <img src="{{ user.profile_pic.url }}"
-                                    alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                                <a href="{% url 'update_profile_pic' user.username user.pk %}">
+                                    <img src="{{ user.profile_pic.url }}"
+                                        alt="Profile Picture" class="img-raised rounded-circle img-fluid">
+                                </a>
                             </div>
                             <div class="name">
                                 <h3 class="title">{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</h3>
@@ -47,9 +49,7 @@
                     </div>
                 </div>
                 <div class="description text-center">
-                    <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based
-                        Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel
-                        with a solid groove structure. </p>
+                    <p class="bio">{% if user.bio %}{{ user.bio }}{% else %}Hey there! Welcome to my profile{% endif %}</p>
                 </div>
                 <div class="row">
                     <div class="col-md-6 ml-auto mr-auto">
@@ -88,13 +88,3 @@
 
 {% endblock %}
 
-{% block js %}  
-
-<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
-    integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous">
-</script>
-<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
-    integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous">
-</script>
-<script src="{% static 'js/profile.js' %}"></script>
-{% endblock %}

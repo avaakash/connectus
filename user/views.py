@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
-from .forms import SignUpForm, ProfileUpdate
+from .forms import SignUpForm, ProfileUpdate, ProfilePicUpdate
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 
@@ -35,14 +35,25 @@ def about(request, username, pk):
 def about_edit(request, username, pk):
     user = get_object_or_404(User,pk=pk)
     if request.method == 'POST':
-        form = ProfileUpdate(request.POST,request.FILES, instance=user)
+        form = ProfileUpdate(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('about', username=user.username, pk=user.pk)
     else:
-        form = ProfileUpdate()
-    return render(request,'about_edit.html',{'form':form})
+        form = ProfileUpdate(instance=user)
+    return render(request,'about_edit.html',{'form':form,'user':user})
 
 def friend_list(request,username,pk):
     user = get_object_or_404(User,username=username,pk=pk)
     return render(request,'friend_list.html',{'user':user})
+
+def update_profile_pic(request,username,pk):
+    user = get_object_or_404(User,pk=pk)
+    if request.method == 'POST':
+        form = ProfilePicUpdate(request.POST, request.FILES, instance=user)
+        if form.is_valid:
+            form.save()
+            return redirect('profile', username, pk)
+    else:
+        form = ProfilePicUpdate()
+    return render(request,'update_profile_pic.html', {'form':form, 'user':user})

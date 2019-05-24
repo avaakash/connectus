@@ -18,4 +18,5 @@ class User(User):
     college = models.CharField(max_length=150,null=True)
     year_of_study = models.PositiveIntegerField(null=True)
     field_of_study = models.CharField(max_length=100,null=True)
+    bio = models.CharField(max_length=244,null=True)
 

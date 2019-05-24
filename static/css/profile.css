@@ -107,8 +107,12 @@ a .material-icons {
 .profile-page .description {
     margin: 1.071rem auto 0;
     max-width: 600px;
-    color: #999;
-    font-weight: 300;
+    color: #9c27b0;
+    font-weight: 600;
+}
+
+.bio {
+    font-size: 60px;
 }
 
 p {
