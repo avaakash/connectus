@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block navbar %}
+    {% include 'include/navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-4 col-md-6 col-sm-8">
+        <h5>{{ user.pk }}</h5>
+        <h4>{{ user.username }}</h4>
+
+    </div>
+{% endblock %}

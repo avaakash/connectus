@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block navbar %}
+    {% include 'include/navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-4">
+        {% include 'include/navbar_profile.html' %}
+        <p>Name : {{ user.get_full_name }}</p>
+        <p>Email : {{ user.email }}</p>
+        <p>Sex : {{ user.sex }}</p>
+        <p>School : {{ user.school }}</p>
+        <p>College : {{user.college }}</p>
+        <p>Field of study : {{ user.field_of_study }}</p>
+        <p>Year of Study : {{ user.year_of_study }}</p>
+        <button type="button" class="btn btn-light"><a href="{% url 'about_edit' user.username user.pk %}">Edit about</a></button>
+    </div>
+{% endblock %}

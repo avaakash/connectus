@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block navbar %}
+    {% include 'include/navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-4">
+        {% include 'include/navbar_profile.html' %}
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% include 'include/form.html' %}
+                    <button type="submit" class="btn btn-primary btn-block">Update about</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

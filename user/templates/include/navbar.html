@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <a href="{% url 'home' %}" class="navbar-brand ml-auto">
+        ConnectUS
+    </a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <form class="form-inline my-2 my-lg-0 ml-auto">
+            <input type="text" class="form-control mr-sm-2" placeholder="Search">
+            <button type="submit" class="btn btn-outline-dark ">Search</button>
+        </form>
+        <div class="navbar-nav ml-auto">
+            <a href="{% url 'profile' user.username user.pk %}" class="nav-item nav-link">
+                <i class="far fa-user" aria-hidden="true">Profile</i>
+            </a>
+            <a href="{% url 'logout' %}" class="nav-item nav-link">
+                <i class="fas fa-sign-out-alt" aria-hidden="true">Logout</i>
+            </a>
+        </div>
+    </div>
+</nav>
