@@ -42,3 +42,7 @@ def about_edit(request, username, pk):
     else:
         form = ProfileUpdate()
     return render(request,'about_edit.html',{'form':form})
+
+def friend_list(request,username,pk):
+    user = get_object_or_404(User,username=username,pk=pk)
+    return render(request,'friend_list.html',{'user':user})

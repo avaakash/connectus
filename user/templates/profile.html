@@ -1,14 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'profile_base.html' %}
 
 {% block title %}{{ user.username }}{% endblock %}
 
-{% block navbar %}
-    {% include 'include/navbar.html' %}
-{% endblock %}
-
 {% block content %}
-    <div class="col-lg-4">
-        {% include 'include/navbar_profile.html' %}
+    <div>
         <h4>{{ user.username }}</h4>
         <img src="{{ user.profile_pic.url }}" height='150' widht='150'>
     </div>

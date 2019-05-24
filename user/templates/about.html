@@ -1,14 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'profile_base.html' %}
 
-{% block title %}{{ user.username }}{% endblock %}
-
-{% block navbar %}
-    {% include 'include/navbar.html' %}
-{% endblock %}
+{% block title %}{{ user.username }}'s About{% endblock %}
 
 {% block content %}
-    <div class="col-lg-4">
-        {% include 'include/navbar_profile.html' %}
+    <div class="col-lg-6">
         <p>Name : {{ user.get_full_name }}</p>
         <p>Email : {{ user.email }}</p>
         <p>Sex : {{ user.sex }}</p>

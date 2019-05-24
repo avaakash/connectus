@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+<link rel="stylesheet"
+    href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+    integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+<link rel="stylesheet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
+<link rel="stylsheet" href="{% static 'css/profile.css' %}"
+{% endblock %}
+
+{% block navbar %}
+    {% include 'include/navbar.html' %}
+{% endblock %}
+
+{% block content_navbar %}
+<div class="profile-page">
+    <div class="page-header header-filter" data-parallax="true"
+        style="background-image:url('http://wallpapere.org/wp-content/uploads/2012/02/black-and-white-city-night.png');">
+    </div>
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile">
+                            <div class="avatar">
+                                <img src="{{ user.profile_pic.url }}"
+                                    alt="Circle Image" class="img-raised rounded-circle img-fluid">
+                            </div>
+                            <div class="name">
+                                <h3 class="title">{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</h3>
+                                <h6>{% if user.field_of_study %}{{ user.field_of_study }}{% endif %} Student</h6>
+                                <a href="#pablo" class="btn btn-just-icon btn-link btn-dribbble"><i
+                                        class="fa fa-dribbble"></i></a>
+                                <a href="#pablo" class="btn btn-just-icon btn-link btn-twitter"><i
+                                        class="fa fa-twitter"></i></a>
+                                <a href="#pablo" class="btn btn-just-icon btn-link btn-pinterest"><i
+                                        class="fa fa-pinterest"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="description text-center">
+                    <p>An artist of considerable range, Chet Faker — the name taken by Melbourne-raised, Brooklyn-based
+                        Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel
+                        with a solid groove structure. </p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ml-auto mr-auto">
+                        <div class="profile-tabs">
+                            <ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+                                {% url 'profile' user.username user.pk as profile_url %}
+                                {% url 'about' user.username user.pk as about_url %}
+                                {% url 'friend_list' user.username user.pk as friend_url %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.get_full_path == profile_url %}active{% endif %}" href="{{ profile_url }}" role="tab" data-toggle="tab">
+                                        <i class="fas fa-portrait"></i>
+                                        Posts
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.get_full_path == about_url %}active{% endif %}" href="{{ about_url }}" role="tab" data-toggle="tab">
+                                        <i class="fas fa-address-card"></i>
+                                        About
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.get_full_path == friend_url %}active{% endif %}" href="{{ friend_url }}" role="tab" data-toggle="tab">
+                                        <i class="fas fa-user-friends"></i>
+                                        Friends
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}  
+
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
+    integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous">
+</script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
+    integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous">
+</script>
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

@@ -30,6 +30,8 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/$', acc_views.profile, name='profile'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/about/$', acc_views.about, name='about'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/about/edit$', acc_views.about_edit, name='about_edit'),
+    url(r'^(?P<username>\w+)/(?P<pk>\d+)/friends/$', acc_views.friend_list, name='friend_list'),
     url(r'^media/(?P<path>.*)$', serve, { 'document_root': settings.MEDIA_ROOT}), 
     url(r'^static/(?P<path>.*)$', serve, { 'document_root': settings.STATIC_FILE_ROOT}),    
+    
 ]
