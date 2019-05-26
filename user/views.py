@@ -3,22 +3,35 @@ from .models import User
 from .forms import SignUpForm, ProfileUpdate, ProfilePicUpdate
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.views import LoginView
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 # Create your views here.
 
+
 def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request,user)
-            return redirect('/')
+    if request.user.is_authenticated:
+        return redirect('home')
     else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form':form})
+        if request.method == 'POST':
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                raw_password = form.cleaned_data.get('password1')
+                user = authenticate(username=username, password=raw_password)
+                login(request, user)
+                return redirect('/')
+        else:
+            form = SignUpForm()
+        return render(request, 'signup.html', {'form': form})
+
+class CustomLoginView(LoginView):
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
 @login_required
 def home(request):
@@ -26,22 +39,25 @@ def home(request):
 
 def profile(request,username,pk):
     user = get_object_or_404(User,pk=pk)
-    return render(request,'profile.html', {'user':user})
+    ishim = False
+    if user == request.user:
+        ishim = True
+    return render(request,'profile.html', {'user':user, 'ishim':ishim})
 
 def about(request, username, pk):
     user = get_object_or_404(User,pk=pk)
-    return render(request,'about.html',{'user':user})
-
-def about_edit(request, username, pk):
-    user = get_object_or_404(User,pk=pk)
-    if request.method == 'POST':
-        form = ProfileUpdate(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('about', username=user.username, pk=user.pk)
+    if request.user.pk == user.pk:
+        if request.method == 'POST':
+            form = ProfileUpdate(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('about', username=user.username, pk=user.pk)
+        else:
+            form = ProfileUpdate(instance=user)
+        return render(request,'about.html',{'form':form,'user':user})
     else:
-        form = ProfileUpdate(instance=user)
-    return render(request,'about_edit.html',{'form':form,'user':user})
+        return render(request,'about.html',{'user':user})
+
 
 def friend_list(request,username,pk):
     user = get_object_or_404(User,username=username,pk=pk)

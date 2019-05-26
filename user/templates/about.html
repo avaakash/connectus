@@ -4,6 +4,17 @@
 
 {% block content %}
     <div class="col-lg-6">
+        {% if request.user.pk == user.pk %}
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" novalidate">
+                    {% csrf_token %}
+                    {% include 'include/form.html' %}
+                    <button type="submit" class="btn btn-primary btn-block">Update about</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
         <p>Name : {{ user.get_full_name }}</p>
         <p>Email : {{ user.email }}</p>
         <p>Sex : {{ user.sex }}</p>
@@ -11,6 +22,6 @@
         <p>College : {{user.college }}</p>
         <p>Field of study : {{ user.field_of_study }}</p>
         <p>Year of Study : {{ user.year_of_study }}</p>
-        <button type="button" class="btn btn-light"><a href="{% url 'about_edit' user.username user.pk %}">Edit about</a></button>
+        {% endif %}
     </div>
 {% endblock %}

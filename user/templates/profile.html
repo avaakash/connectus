@@ -6,5 +6,12 @@
     <div>
         <h4>{{ user.username }}</h4>
         <img src="{{ user.profile_pic.url }}" height='150' widht='150'>
+        <p>Logged:{{ request.user.username }}</p>
+        <p>Accessed:{{ user.username }}</p>
+        {% if request.user.pk == user.pk %}
+        <p>True</p>
+        {% else %}
+        <p>False</p>
+        {% endif %}
     </div>
 {% endblock %}

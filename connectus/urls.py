@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LogoutView
 from user import views as acc_views
 from django.urls import path
 from django.views.static import serve
@@ -23,13 +23,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^login/$', LoginView.as_view(template_name='login.html'),name='login'),
+    url(r'^login/$', acc_views.CustomLoginView.as_view(template_name='login.html'),name='login'),
     url(r'^signup/$', acc_views.signup, name='signup'),
     url(r'^logout/$', LogoutView.as_view(),name='logout'),
     url(r'^$', acc_views.home, name='home'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/$', acc_views.profile, name='profile'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/about/$', acc_views.about, name='about'),
-    url(r'^(?P<username>\w+)/(?P<pk>\d+)/about/edit/$', acc_views.about_edit, name='about_edit'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/profile_pic/$', acc_views.update_profile_pic, name='update_profile_pic'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/friends/$', acc_views.friend_list, name='friend_list'),
     url(r'^media/(?P<path>.*)$', serve, { 'document_root': settings.MEDIA_ROOT}), 
