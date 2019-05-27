@@ -59,6 +59,3 @@ class Comments(models.Model):
 class Post_Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-
-

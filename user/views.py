@@ -37,6 +37,7 @@ class CustomLoginView(LoginView):
 def home(request):
     return render(request,'home.html',{'user':request.user})
 
+@login_required
 def profile(request,username,pk):
     user = get_object_or_404(User,pk=pk)
     posts = Post.objects.filter(user=user).order_by('-created_at')
@@ -51,6 +52,7 @@ def profile(request,username,pk):
         form = NewPost()
     return render(request,'profile.html', {'user':user,'form':form,'posts':posts, })
 
+@login_required
 def about(request, username, pk):
     user = get_object_or_404(User,pk=pk)
     if request.user.pk == user.pk:
@@ -65,11 +67,7 @@ def about(request, username, pk):
     else:
         return render(request,'about.html',{'user':user})
 
-
-def friend_list(request,username,pk):
-    user = get_object_or_404(User,username=username,pk=pk)
-    return render(request,'friend_list.html',{'user':user})
-
+@login_required
 def update_profile_pic(request,username,pk):
     user = get_object_or_404(User,pk=request.user.pk)
     if request.user.pk == int(pk):
@@ -84,6 +82,7 @@ def update_profile_pic(request,username,pk):
     else:
         return redirect('profile',user.username,user.pk )
 
+@login_required
 def post_comment(request,username,pk,post_pk):
     user = get_object_or_404(User,pk=request.user.pk)
     post = get_object_or_404(Post,pk=post_pk)
@@ -99,9 +98,15 @@ def post_comment(request,username,pk,post_pk):
         form = NewComment()
     return render(request,'post_comment.html',{'form':form,'post':post,'user':get_object_or_404(User,pk=pk)})
 
+@login_required
 def post_likes(request,username,pk,post_pk):
     user = get_object_or_404(User,pk=request.user.pk)
     newlike, created = Post_Likes.objects.get_or_create(user=user, post_id=post_pk)
     if not created:
         newlike.delete()
     return redirect('profile',username,pk)
+
+@login_required
+def friend_list(request,username,pk):
+    user = get_object_or_404(User,username=username,pk=pk)
+    return render(request,'friend_list.html',{'user':user,})
