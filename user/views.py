@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
+from friendship.models import Friend, Follow, Block, FriendshipRequest
 # Create your views here.
 
 @never_cache
@@ -41,6 +42,11 @@ def home(request):
 def profile(request,username,pk):
     user = get_object_or_404(User,pk=pk)
     posts = Post.objects.filter(user=user).order_by('-created_at')
+    are_friends = Friend.objects.are_friends(request.user,user)
+    try:
+        request_sent = FriendshipRequest.objects.get(to_user=user,from_user=request.user)
+    except FriendshipRequest.DoesNotExist:
+        request_sent = None
     if request.method == 'POST':
         form = NewPost(request.POST)
         if form.is_valid:
@@ -50,7 +56,8 @@ def profile(request,username,pk):
             return redirect('profile',username,pk)
     else:
         form = NewPost()
-    return render(request,'profile.html', {'user':user,'form':form,'posts':posts, })
+        args = {'user':user,'form':form,'posts':posts,'are_friends':are_friends,'request_sent':request_sent}
+    return render(request,'profile.html', args)
 
 @login_required
 def about(request, username, pk):
@@ -109,4 +116,27 @@ def post_likes(request,username,pk,post_pk):
 @login_required
 def friend_list(request,username,pk):
     user = get_object_or_404(User,username=username,pk=pk)
-    return render(request,'friend_list.html',{'user':user,})
+    try:
+        friend_request = FriendshipRequest.objects.get(to_user=request.user)
+    except:
+        friend_request = None
+    friends = Friend.objects.friends(user)
+    sent_requests = Friend.objects.sent_requests(user=request.user)
+    args = {'user':user, 'friend_request':friend_request, 'friends':friends, 'sent_requests':sent_requests}
+    return render(request,'friend_list.html',args)
+
+@login_required
+def add_friend(request,pk):
+    requested_user = get_object_or_404(User,pk=pk)
+    Friend.objects.add_friend(request.user,requested_user)
+    return redirect('profile' ,requested_user.username, pk)
+
+@login_required
+def add_friend_request(request,pk,bool):
+    user = get_object_or_404(User,pk=pk)
+    friend_request = FriendshipRequest.objects.get(from_user = user,to_user=request.user.pk)
+    if bool:
+        friend_request.accept()
+    else:
+        friend_request.reject()
+    return redirect('friend_list',request.user.username,request.user.pk)

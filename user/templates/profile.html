@@ -24,6 +24,21 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+                {% if are_friends %}
+                    <button type="button" class="btn btn-social btn-disabled mt-4 mb-0">Friends</button>
+                {% elif request_sent %}
+                    <a href="{% url 'add_friend_request' user.pk True %}" style="display: flex">
+                        <button type="button" class="btn btn-outline-dark">Confirm</button>
+                    </a>
+                    <a href="{% url 'add_friend_request' user.pk False %}">
+                        <button type="button" class="btn btn-outline-dark">Reject</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'add_friend' user.pk %}">
+                        <button class="btn btn-outline-dark" type="button">Add Friend</button>
+                    </a>
+                {% endif %}
             {% endif %}
             <div>
                 {% for post in posts %}

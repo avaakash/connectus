@@ -1,7 +1,50 @@
 {% extends 'profile_base.html' %}
-
 {% block title %}{{ user.username }}'s Friends{% endblock %}
 
 {% block content %}
-<h2>Upcoming feature</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            {% if request.user.pk == user.pk %}
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Friend Requests</h3>
+                    <div>
+                        {% for in_request in friend_requests %}
+                        <h3>{{ in_request.user.username }} </h3>
+                        <a href="{% url 'add_friend_request' in_request.user.pk True %}" style="display: flex">
+                            <button type="button" class="btn btn-outline-dark">Confirm</button>
+                        </a>
+                        <a href="{% url 'add_friend_request' in_request.user.pk False %}">
+                            <button type="button" class="btn btn-outline-dark">Reject</button>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Sent Request</h3>
+                    {% for sent_request in sent_requests %}
+                    <h5>{{ sent_request.user.username }}</h5>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Friends</h3>
+                    <div>
+                        {% for friend in friends %}
+                        <a href="{% url 'profile' friend.user.username friend.user.pk %}">
+                            <img src="{{ friend.user.profile_pic.url }}" class="rounded float-left img-thumbnail"  width="50px" height="50px">
+                            <span class="align-middle float-left ml-2" style="display: inline" >
+                                <h4> {{ friend.user.username }}</h4>
+                            </span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
