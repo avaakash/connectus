@@ -1,22 +1,45 @@
 {% extends 'profile_base.html' %}
-{% load humanize %}
+{% load humanize form_tags widget_tweaks %}
 
 {% block content %}
-<div>
-    <div class="col-lg-4 col-md-6 col-sm-8">
-        <h3 class="mb-2">{{ post.user.username }}</h3>
-        <small class="text-muted">{{ post.created_at|naturaltime }}</small>
-        <p>{{ post.content }}</p>
-        <form method="POST" novalidate>
-            {% csrf_token %}
-            {% include 'include/form.html' %}
-            <button type="submit" class="btn btn-outline-dark">comment</button>
-        </form>
-        {% for comment in post.get_comments %}
-            <h5 class="mb-2">{{ comment.user.username }}</h5>
-            <small class="text-muted">{{ comment.created_at|naturaltime }}</small>
-            <p>{{ comment.content }}</p>
-            <hr>
-        {% endfor %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-6 col-sm-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-2">{{ post.user.username }}</h4>
+                <small class="text-muted">{{ post.created_at|naturaltime }}</small>
+                <h5 class="card-text">{{ post.content }}</h5>
+            </div>
+            <div class="card-footer">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>{{ request.user.username }}</h5>
+                        <form method="POST" novalidate>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% render_field form.content class=form.content|input_class %}
+                                {% for error in form.content.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="btn"><i role="button"
+                                        class="far fa-paper-plane"></i></button>    
+                            </div>
+                        </form>
+                        {% for comment in post.get_comments %}
+                        <h4 class="mb-2">{{ comment.user.username }}</h4>
+                        <p class="mb-0">{{ comment.content }}</p>
+                        <small class="text-muted">
+                            {{ comment.created_at|naturaltime }}</small>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 {% endblock %}

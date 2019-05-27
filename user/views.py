@@ -101,5 +101,7 @@ def post_comment(request,username,pk,post_pk):
 
 def post_likes(request,username,pk,post_pk):
     user = get_object_or_404(User,pk=request.user.pk)
-    newlike = Post_Likes.objects.get_or_create(user=user, post_id=post_pk)
+    newlike, created = Post_Likes.objects.get_or_create(user=user, post_id=post_pk)
+    if not created:
+        newlike.delete()
     return redirect('profile',username,pk)

@@ -9,9 +9,11 @@
 {% endif %}
 
 {% for field in form %}
-    <div class="form-group">
-        {{ field.label_tag }}
-        {% render_field field class=field|input_class %}
+    <div class="form-group" {% block stlye %}{% endblock %}>
+        <label {% block label %}{% endblock %}>{{ field.label_tag }}</label>
+        <div {% block input %}{% endblock %}>
+            {% render_field field class=field|input_class %}
+        </div>
         {% for error in field.errors %}
             <div class="invalid-feedback">
                 {{ error }}

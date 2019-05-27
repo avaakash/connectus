@@ -33,7 +33,10 @@ class Post(models.Model):
     @property
     def get_likes(self):
         return Post_Likes.objects.filter(post_id=self.id).count()
-        
+    @property
+    def get_comment_count(self):
+        return Comments.objects.filter(post_id=self.id).count()
+    
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()

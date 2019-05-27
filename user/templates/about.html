@@ -1,27 +1,41 @@
 {% extends 'profile_base.html' %}
+{% load widget_tweaks form_tags %}
 
 {% block title %}{{ user.username }}'s About{% endblock %}
-
 {% block content %}
-    <div class="col-lg-6">
-        {% if request.user.pk == user.pk %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
         <div class="card">
             <div class="card-body">
-                <form method="POST" novalidate">
+                {% if request.user.pk == user.pk %}
+                <form method="POST" novalidate>
                     {% csrf_token %}
-                    {% include 'include/form.html' %}
+                    {% for field in form %}
+                    <div class="form-group" style="display: flex">
+                        <label class="col-sm-4 label-control">{{ field.label_tag }}</label>
+                        <div class="col-sm-6">
+                            {% render_field field class=field|input_class %}
+                        </div>
+                        {% for error in field.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
                     <button type="submit" class="btn btn-primary btn-block">Update about</button>
                 </form>
+                {% else %}
+                <h4>Name : {{ user.get_full_name }}</h4>
+                <h4>Email : {{ user.email }}</h4>
+                <h4>Sex : {{ user.sex }}</h4>
+                <h4>School : {{ user.school }}</h4>
+                <h4>College : {{user.college }}</h4>
+                <h4>Field of study : {{ user.field_of_study }}</h4>
+                <h4>Year of Study : {{ user.year_of_study }}</h4>
+                {% endif %}
             </div>
         </div>
-        {% else %}
-        <p>Name : {{ user.get_full_name }}</p>
-        <p>Email : {{ user.email }}</p>
-        <p>Sex : {{ user.sex }}</p>
-        <p>School : {{ user.school }}</p>
-        <p>College : {{user.college }}</p>
-        <p>Field of study : {{ user.field_of_study }}</p>
-        <p>Year of Study : {{ user.year_of_study }}</p>
-        {% endif %}
     </div>
+</div>
 {% endblock %}

@@ -19,11 +19,13 @@ class ProfilePicUpdate(forms.ModelForm):
         fields = ['profile_pic']
 
 class NewPost(forms.ModelForm):
+    content = forms.CharField(label='post', widget=forms.TextInput(attrs={'placeholder':'what you want to post?'}))
     class Meta:
         model = Post
         fields = ['content']
 
 class NewComment(forms.ModelForm):
+    content = forms.CharField(label='comment',widget=forms.TextInput(attrs={'placeholder':'write your comment here'}))
     class Meta:
         model = Comments
         fields = ['content']

@@ -1,51 +1,65 @@
 {% extends 'profile_base.html' %}
-{% load humanize %}
+{% load humanize widget_tweaks form_tags %}
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-    <div class="col-lg-4 col-md-4 col-sm-6">
-        <p>{{ request.user.pk }}</p>
-        <p>{{ user.pk }}</p>
-        <h4>{{ user.username }}</h4>
-        <img src="{{ user.profile_pic.url }}" height='150' widht='150'>
-        <p>Logged:{{ request.user.username }}</p>
-        <p>Accessed:{{ user.username }}</p>
-        {% if request.user.pk == user.pk %}
-        <div >
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Update</h3>
-                    <form method="POST" novalidate>
-                        {% csrf_token %}
-                        {% include 'include/form.html' %}
-                        <button type="submit" class="btn btn-outline-dark">Post it</button>
-                    </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            {% if request.user.pk == user.pk %}
+            <div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Update</h3>
+                        <form method="POST" novalidate>
+                            {% csrf_token %}
+                            {% render_field form.content class=form.content|input_class %}
+                            {% for error in form.content.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-outline-dark">Post it</button>
+                        </form>
+                    </div>
                 </div>
             </div>
+            {% endif %}
+            <div>
+                {% for post in posts %}
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{% url 'profile' user.username user.pk %}">
+                            <h4 class="card-title card-link mb-0">{{ user.username }}</h4>
+                        </a>
+                        <small class="text-muted " style="font-size:10px">{{ post.created_at|naturaltime }}</small>
+                        <h4 class="card-text">{{ post.content }}</h4>
+                        <div>
+                            <a href="{% url 'post_like' user.username user.pk post.pk %}">
+                                <i class="far fa-heart"><strong> {{ post.get_likes }}</strong></i>
+                            </a>
+                            <a href="{% url 'post_comment' user.username user.pk post.pk %}">
+                                <i class="far fa-comment-dots"><strong> {{ post.get_comment_count }}</strong></i>
+                            </a>
+                        </div>
+                        <div>
+                            {% for comment in post.get_comments %}
+                            <div class="card mb-0 mt-1">
+                                <div class="card-body">
+                                <a href="{% url 'profile' comment.user.username comment.user.pk %}">
+                                    <p class="small mb-0">{{ comment.user.username }}</p>
+                                </a>
+                                <p class="mb-0">{{ comment.content }}</p>
+                                <small class="text-muted">
+                                    {{ comment.created_at|naturaltime }}
+                                </small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        {% endif %}
-        {% for post in posts %}
-        <div>
-            <h5 class="mb-0">{{ post.user.username }}</h5>
-            <small class="text-muted " style="font-size:10px">{{ post.created_at|naturaltime }}</small>
-            <h4>{{ post.content }}</h4>
-            <a href="{% url 'post_like' user.username user.pk post.pk %}"">
-                <p>{{ post.get_likes }}</p>
-                <button type="submit" class="btn btn-outline-dark">like</button>
-            </a>
-            <a href="{% url 'post_comment' user.username user.pk post.pk %}">
-                <button type="button" class="btn btn-small mb-4">comment</button>
-            </a>
-            {% for comment in post.get_comments %}
-            <p class="small username mb-0">{{ comment.user.username }}</p>
-            <p class="mb-0">{{ comment.content }}</p>
-            <small class="text-muted">
-                {{ comment.created_at|naturaltime }}
-            </small>
-            <p></p>
-            {% endfor %}
-            <hr>
-        </div>
-        {% endfor %}
     </div>
 {% endblock %}
