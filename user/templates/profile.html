@@ -1,17 +1,51 @@
 {% extends 'profile_base.html' %}
-
+{% load humanize %}
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-    <div>
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <p>{{ request.user.pk }}</p>
+        <p>{{ user.pk }}</p>
         <h4>{{ user.username }}</h4>
         <img src="{{ user.profile_pic.url }}" height='150' widht='150'>
         <p>Logged:{{ request.user.username }}</p>
         <p>Accessed:{{ user.username }}</p>
         {% if request.user.pk == user.pk %}
-        <p>True</p>
-        {% else %}
-        <p>False</p>
+        <div >
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Update</h3>
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        {% include 'include/form.html' %}
+                        <button type="submit" class="btn btn-outline-dark">Post it</button>
+                    </form>
+                </div>
+            </div>
+        </div>
         {% endif %}
+        {% for post in posts %}
+        <div>
+            <h5 class="mb-0">{{ post.user.username }}</h5>
+            <small class="text-muted " style="font-size:10px">{{ post.created_at|naturaltime }}</small>
+            <h4>{{ post.content }}</h4>
+            <a href="{% url 'post_like' user.username user.pk post.pk %}"">
+                <p>{{ post.get_likes }}</p>
+                <button type="submit" class="btn btn-outline-dark">like</button>
+            </a>
+            <a href="{% url 'post_comment' user.username user.pk post.pk %}">
+                <button type="button" class="btn btn-small mb-4">comment</button>
+            </a>
+            {% for comment in post.get_comments %}
+            <p class="small username mb-0">{{ comment.user.username }}</p>
+            <p class="mb-0">{{ comment.content }}</p>
+            <small class="text-muted">
+                {{ comment.created_at|naturaltime }}
+            </small>
+            <p></p>
+            {% endfor %}
+            <hr>
+        </div>
+        {% endfor %}
     </div>
 {% endblock %}

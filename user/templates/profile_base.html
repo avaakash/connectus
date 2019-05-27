@@ -30,10 +30,15 @@
                     <div class="col-md-6 ml-auto mr-auto">
                         <div class="profile">
                             <div class="avatar">
+                                {% if user.pk == request.user.pk %}
                                 <a href="{% url 'update_profile_pic' user.username user.pk %}">
                                     <img src="{{ user.profile_pic.url }}"
                                         alt="Profile Picture" class="img-raised rounded-circle img-fluid">
                                 </a>
+                                {% else %}
+                                <img src="{{ user.profile_pic.url }}"
+                                        alt="Profile Picture" class="img-raised rounded-circle img-fluid">
+                                {% endif %}
                             </div>
                             <div class="name">
                                 <h3 class="title">{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</h3>

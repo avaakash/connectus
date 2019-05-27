@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/about/$', acc_views.about, name='about'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/profile_pic/$', acc_views.update_profile_pic, name='update_profile_pic'),
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/friends/$', acc_views.friend_list, name='friend_list'),
+    url(r'^(?P<username>\w+)/(?P<pk>\d+)/(?P<post_pk>\d+)/$', acc_views.post_comment, name='post_comment'),
+    url(r'^(?P<username>\w+)/(?P<pk>\d+)/(?P<post_pk>\d+)/like$', acc_views.post_likes, name='post_like'),
     url(r'^media/(?P<path>.*)$', serve, { 'document_root': settings.MEDIA_ROOT}), 
     url(r'^static/(?P<path>.*)$', serve, { 'document_root': settings.STATIC_FILE_ROOT}),    
     
