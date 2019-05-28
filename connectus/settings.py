@@ -123,7 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIR =  [
+STATICFILES_DIRS =  [
     os.path.join(BASE_DIR,'static')
 ]
 STATIC_FILE_ROOT = os.path.join(BASE_DIR,'static')
@@ -133,4 +133,3 @@ LOGIN_REDIRECT_URL = 'home'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-

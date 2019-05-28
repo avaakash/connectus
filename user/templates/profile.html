@@ -3,9 +3,63 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
+    {% if request.user.pk != user.pk %}   
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-sm-12">
-            
+        <div class="card">
+            <div class="card-body">
+                <div class="float-left">
+                    {% if are_friends %}
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-disabled mt-4 mb-0">Friends</button>
+                        <button type="button"
+                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split mt-4 mb-0"
+                            id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
+                            data-toggle="dropdown"></button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'add_remove_friend' user.pk %}">Unfriend</a>
+                        </div>
+                    </div>
+                    {% elif request_sent.from_user.pk == request.user.pk %}
+                    <button type="button" class="btn btn-disabled mt-4 mb-0">Request Sent</button>
+                    {% elif request_sent.to_user.pk == request.user.pk %}
+                    <a href="{% url 'add_friend_request' user.pk True %}" style="display: flex">
+                        <button type="button" class="btn btn-outline-dark">Confirm</button>
+                    </a>
+                    <a href="{% url 'add_friend_request' user.pk False %}">
+                        <button type="button" class="btn btn-outline-dark">Reject</button>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'add_remove_friend' user.pk %}">
+                        <button class="btn btn-outline-dark" type="button">Add Friend</button>
+                    </a>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if follow_check %}
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-outline-dark mt-3 mb-0">Following</button>
+                        <button type="button"
+                            class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split mt-3 mb-0"
+                            id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"
+                            data-toggle="dropdown"></button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{% url 'add_remove_follow' user.pk %}">Unfollow</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'add_remove_follow' user.pk %}">
+                        <button type="button" class="btn btn-outline-dark mt-4 mb-0">Follow</button>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
             {% if request.user.pk == user.pk %}
             <div>
                 <div class="card">
@@ -15,31 +69,17 @@
                             {% csrf_token %}
                             {% render_field form.content class=form.content|input_class %}
                             {% for error in form.content.errors %}
-                                <div class="invalid-feedback">
-                                    {{ error }}
-                                </div>
+                            <div class="invalid-feedback">
+                                {{ error }}
+                            </div>
                             {% endfor %}
                             <button type="submit" class="btn btn-outline-dark">Post it</button>
                         </form>
                     </div>
                 </div>
             </div>
-            {% else %}
-                {% if are_friends %}
-                    <button type="button" class="btn btn-social btn-disabled mt-4 mb-0">Friends</button>
-                {% elif request_sent %}
-                    <a href="{% url 'add_friend_request' user.pk True %}" style="display: flex">
-                        <button type="button" class="btn btn-outline-dark">Confirm</button>
-                    </a>
-                    <a href="{% url 'add_friend_request' user.pk False %}">
-                        <button type="button" class="btn btn-outline-dark">Reject</button>
-                    </a>
-                {% else %}
-                    <a href="{% url 'add_friend' user.pk %}">
-                        <button class="btn btn-outline-dark" type="button">Add Friend</button>
-                    </a>
-                {% endif %}
             {% endif %}
+            
             <div>
                 {% for post in posts %}
                 <div class="card">

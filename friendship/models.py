@@ -352,7 +352,11 @@ class FriendshipManager(models.Manager):
             from_user=from_user, to_user=to_user
         ).exists():
             return False
-
+        elif not FriendshipRequest.objects.filter(
+            from_user=to_user, to_user=from_user
+        ).exists():
+            return False
+            
         return True
 
     def remove_friend(self, from_user, to_user):

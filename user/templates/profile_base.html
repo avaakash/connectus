@@ -9,10 +9,7 @@
 <link rel="stylesheet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
 <link rel="stylsheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
-{% block js %}  
-</script>
-<script src="{% static 'js/profile.js' %}"></script>
-{% endblock %}
+
 
 {% block navbar %}
     {% include 'include/navbar.html' %}
@@ -64,19 +61,19 @@
                                 {% url 'about' user.username user.pk as about_url %}
                                 {% url 'friend_list' user.username user.pk as friend_url %}
                                 <li class="nav-item">
-                                    <a class="nav-link {% if request.get_full_path == profile_url %}active{% endif %}" href="{{ profile_url }}" role="tab" data-toggle="tab">
+                                    <a class="nav-link {% if request.get_full_path == profile_url %}active{% endif %}" href="{{ profile_url }}" role="tab">
                                         <i class="fas fa-portrait"></i>
                                         Posts
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {% if request.get_full_path == about_url %}active{% endif %}" href="{{ about_url }}" role="tab" data-toggle="tab">
+                                    <a class="nav-link {% if request.get_full_path == about_url %}active{% endif %}" href="{{ about_url }}" role="tab">
                                         <i class="fas fa-address-card"></i>
                                         About
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {% if request.get_full_path == friend_url %}active{% endif %}" href="{{ friend_url }}" role="tab" data-toggle="tab">
+                                    <a class="nav-link {% if request.get_full_path == friend_url %}active{% endif %}" href="{{ friend_url }}" role="tab">
                                         <i class="fas fa-user-friends"></i>
                                         Friends
                                     </a>
@@ -89,7 +86,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}
-

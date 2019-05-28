@@ -9,24 +9,32 @@
                 <div class="card-body">
                     <h3 class="card-title">Friend Requests</h3>
                     <div>
-                        {% for in_request in friend_requests %}
-                        <h3>{{ in_request.user.username }} </h3>
-                        <a href="{% url 'add_friend_request' in_request.user.pk True %}" style="display: flex">
+                        {% if friend_requests %}
+                        {% for friend_request in friend_requests %}
+                        <h3>{{ friend_request.user.username }} </h3>
+                        <a href="{% url 'add_friend_request' friend_request.user.pk True %}" style="display: flex">
                             <button type="button" class="btn btn-outline-dark">Confirm</button>
                         </a>
-                        <a href="{% url 'add_friend_request' in_request.user.pk False %}">
+                        <a href="{% url 'add_friend_request' friend_request.user.pk False %}">
                             <button type="button" class="btn btn-outline-dark">Reject</button>
                         </a>
                         {% endfor %}
+                        {% else %}
+                        <h5>No Friend Request</h5>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Sent Request</h3>
+                    {% if sent_requests %}
                     {% for sent_request in sent_requests %}
                     <h5>{{ sent_request.user.username }}</h5>
                     {% endfor %}
+                    {% else %}
+                    <h5>No sent friend requests</h5>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
