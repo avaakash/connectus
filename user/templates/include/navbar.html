@@ -12,6 +12,38 @@
             <button type="submit" class="btn btn-outline-dark ">Search</button>
         </form>
         <div class="navbar-nav ml-auto">
+            <div class="dropdown">
+                    <i class="fas fa-user-friends" id="dropdownMenuButton" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown"></i>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    {% for friend_request in friend_requests %}
+                    <div class="dropdown-item">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ friend_request.from_user.username }} </h4>
+                                <div>
+                                <form method="POST" action="{% url 'add_friend_request' friend_request.from_user.pk True %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-dark">Confirm</button>
+                                </form>
+                                <form method="POST" action="{% url 'add_friend_request' friend_request.from_user.pk False %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-dark">Reject</button>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="dropdown-item disabled">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"> No Friend Requests </h4>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
             <a href="{% url 'profile' request.user.username request.user.pk %}" class="nav-item nav-link">
                 <i class="far fa-user" aria-hidden="true">Profile</i>
             </a>
