@@ -1,4 +1,5 @@
 {% extends 'profile_base.html' %}
+{% load friendshiptags %}
 {% block title %}{{ user.username }}'s Friends{% endblock %}
 
 {% block content %}
@@ -9,19 +10,22 @@
                 <div class="card-body">
                     <h3 class="card-title">Friend Requests</h3>
                     <div>
-                        {% if friend_requests %}
                         {% for friend_request in friend_requests %}
-                        <h3>{{ friend_request.user.username }} </h3>
-                        <a href="{% url 'add_friend_request' friend_request.user.pk True %}" style="display: flex">
-                            <button type="button" class="btn btn-outline-dark">Confirm</button>
+                        <a href="{% url 'profile' friend_request.from_user.username friend_request.from_user.pk %}">
+                            <img src="{{ friend_request.from_user.profile_pic.url }}" class="rounded float-left img-thumbnail"  width="50px" height="50px">
+                            <h4>{{ friend_request.from_user.username }}</h4>
                         </a>
-                        <a href="{% url 'add_friend_request' friend_request.user.pk False %}">
-                            <button type="button" class="btn btn-outline-dark">Reject</button>
-                        </a>
-                        {% endfor %}
-                        {% else %}
+                        <form method="POST" action="{% url 'add_friend_request' friend_request.from_user.pk True %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-dark">Confirm</button>
+                        </form>
+                        <form method="POST" action="{% url 'add_friend_request' friend_request.from_user.pk False %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-dark">Reject</button>
+                        </form>
+                        {% empty %}
                         <h5>No Friend Request</h5>
-                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

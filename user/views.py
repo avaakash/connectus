@@ -44,9 +44,15 @@ def profile(request,username,pk):
     posts = Post.objects.filter(user=user).order_by('-created_at')
     are_friends = Friend.objects.are_friends(request.user,user)
     try:
-        request_sent = FriendshipRequest.objects.get(to_user=user,from_user=request.user)
+        FriendshipRequest.objects.get(to_user=user,from_user=request.user)
+        request_sent = True
     except FriendshipRequest.DoesNotExist:
-        request_sent = None
+        request_sent = False
+    try:
+        FriendshipRequest.objects.get(to_user=request.user,from_user=user)
+        request_recieved = True
+    except FriendshipRequest.DoesNotExist:
+        request_recieved = False
     follow_check = Follow.objects.follows(request.user,user)
     if request.method == 'POST':
         form = NewPost(request.POST)
@@ -57,7 +63,9 @@ def profile(request,username,pk):
             return redirect('profile',username,pk)
     else:
         form = NewPost()
-        args = {'user':user,'form':form,'posts':posts,'are_friends':are_friends,'request_sent':request_sent,'follow_check':follow_check}
+        args = {'user':user,'form':form,'posts':posts,'are_friends':are_friends,'request_sent':request_sent,
+        'follow_check':follow_check, 'request_recieved':request_recieved,
+        }
     return render(request,'profile.html', args)
 
 @login_required
@@ -117,7 +125,7 @@ def post_likes(request,username,pk,post_pk):
 @login_required
 def friend_list(request,username,pk):
     user = get_object_or_404(User,username=username,pk=pk)
-    friend_requests = Friend.objects.requests(request.user)
+    friend_requests = list(FriendshipRequest.objects.select_related("from_user", "to_user").filter(to_user=user))
     friends = Friend.objects.friends(user)
     sent_requests = Friend.objects.sent_requests(request.user)
     args = {'user':user, 'friend_requests':friend_requests, 'friends':friends, 'sent_requests':sent_requests}
@@ -136,11 +144,12 @@ def add_remove_friend(request,pk):
 def add_friend_request(request,pk,bool):
     user = get_object_or_404(User,pk=pk)
     friend_request = FriendshipRequest.objects.get(from_user = user,to_user=request.user.pk)
-    if bool:
-        friend_request.accept()
-    else:
-        friend_request.reject()
-    return redirect('friend_list',request.user.username,request.user.pk)
+    if request.method == 'POST':
+        if bool:
+            friend_request.accept()
+        else:
+            friend_request.reject()
+        return redirect('friend_list',request.user.username,request.user.pk)
 
 def add_remove_follow(request,pk):
     user = get_object_or_404(User,pk=pk)
