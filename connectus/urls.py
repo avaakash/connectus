@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^(?P<username>\w+)/(?P<pk>\d+)/(?P<post_pk>\d+)/like$', acc_views.post_likes, name='post_like'),
     url(r'^(?P<pk>\d+)/add_remove_friend/$', acc_views.add_remove_friend, name='add_remove_friend'),
     url(r'^(?P<pk>\d+)/add_friend/(?P<bool>[A-Za-z]+)/$', acc_views.add_friend_request, name='add_friend_request'),
+    url(r'^(?P<pk>\d+)/cancel_friend_request/$', acc_views.cancel_friend_request, name='cancel_friend_request'),
     url(r'^(?P<pk>\d+)/add_remove_follow/$', acc_views.add_remove_follow, name='add_remove_follow'),
     url(r'^media/(?P<path>.*)$', serve, { 'document_root': settings.MEDIA_ROOT}), 
     url(r'^static/(?P<path>.*)$', serve, { 'document_root': settings.STATIC_FILE_ROOT}),    

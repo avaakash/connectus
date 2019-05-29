@@ -32,13 +32,19 @@
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Sent Request</h3>
-                    {% if sent_requests %}
                     {% for sent_request in sent_requests %}
-                    <h5>{{ sent_request.user.username }}</h5>
-                    {% endfor %}
-                    {% else %}
+                    <a href="{% url 'profile' sent_request.to_user.username sent_request.to_user.pk %}">
+                        <img src="{{ sent_request.to_user.profile_pic.url }}"
+                            class="rounded float-left img-thumbnail" width="50px" height="50px">
+                        <h4>{{ sent_request.to_user.username }}</h4>
+                    </a>
+                    <form method="POST" action="{% url 'cancel_friend_request' sent_request.to_user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-dark">Cancel Request</button>
+                    </form>
+                    {% empty %}
                     <h5>No sent friend requests</h5>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             {% endif %}

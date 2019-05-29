@@ -21,7 +21,18 @@
                         </div>
                     </div>
                     {% elif request_sent %}
-                    <button type="button" class="btn btn-disabled mt-4 mb-0">Request Sent</button>
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-disabled mt-4 mb-0">Request Sent</button>
+                        <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split mt-4 mb-0"
+                            id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"></button>
+                        <div class="dropdown-menu dropdown-menu-rigth" aria-labelledby="dropdownMenuButton">
+                            <form method="POST" action="{% url 'cancel_friend_request' user.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Cancel Request</button>
+                            </form>
+                        </div>
+                    </div>
+                    
                     {% elif request_recieved %}
                     <form method="POST" action="{% url 'add_friend_request' user.pk True %}">
                         {% csrf_token %}

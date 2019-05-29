@@ -143,12 +143,19 @@ def add_remove_friend(request,pk):
 @login_required
 def add_friend_request(request,pk,bool):
     user = get_object_or_404(User,pk=pk)
-    friend_request = FriendshipRequest.objects.get(from_user = user,to_user=request.user.pk)
+    friend_request = FriendshipRequest.objects.get(from_user = user,to_user=request.user)
     if request.method == 'POST':
         if bool:
             friend_request.accept()
         else:
             friend_request.reject()
+        return redirect('friend_list',request.user.username,request.user.pk)
+
+def cancel_friend_request(request,pk):
+    user = get_object_or_404(User,pk=pk)
+    friend_request = FriendshipRequest.objects.get(from_user = request.user ,to_user=user)
+    if request.method == 'POST':
+        friend_request.cancel()
         return redirect('friend_list',request.user.username,request.user.pk)
 
 def add_remove_follow(request,pk):
