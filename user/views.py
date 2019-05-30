@@ -138,6 +138,8 @@ def add_remove_friend(request,pk):
         Friend.objects.remove_friend(request.user,user)
     else:
         Friend.objects.add_friend(request.user,user)
+        if not Follow.objects.follows(request.user,user):
+            Follow.objects.add_follower(request.user, user)
     return redirect('profile' ,user.username, pk)
 
 @login_required
@@ -147,6 +149,8 @@ def add_friend_request(request,pk,bool):
     if request.method == 'POST':
         if bool:
             friend_request.accept()
+            if not Follow.objects.follows(request.user,user):
+                Follow.objects.add_follower(request.user, user)
         else:
             friend_request.reject()
         return redirect('friend_list',request.user.username,request.user.pk)

@@ -1,1 +1,0 @@
-web: gunicorn connectus.wsgi --log-file -
